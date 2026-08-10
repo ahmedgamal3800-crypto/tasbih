@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-amiri {
+    font-family: 'Amiri', serif;
+  }
+  .font-cairo {
+    font-family: 'Cairo', sans-serif;
+  }
+  .font-tajawal {
+    font-family: 'Tajawal', sans-serif;
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+:root {
+  --bg-main: #0F1713;
+  --bg-card: #141C18;
+  --bg-subcard: #1A2520;
+  --bg-active: #2D4539;
+  --border-subtle: #2A352F;
+  --border-accent: #4A6354;
+  --text-primary: #E4E9E6;
+  --text-heading: #A7C0A8;
+  --text-muted: #8BA491;
+}
+
+/* Native App Feel for Mobile & WebViews */
+* {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+input, textarea, [contenteditable="true"] {
+  user-select: text;
+}
+
+/* Custom scrollbars and smooth momentum scrolling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 164, 145, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 192, 168, 0.45);
+}
+
+/* Base Body Styling with Natural Tones and Safe Area */
+html, body {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  background-color: #0F1713;
+  color: #E4E9E6;
+  font-family: 'Cairo', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Theme variations matching Natural Tones palette */
+body.theme-emerald {
+  background-color: #0F1713;
+  color: #E4E9E6;
+}
+
+body.theme-dark {
+  background-color: #0B110E;
+  color: #E4E9E6;
+}
+
+body.theme-sepia {
+  background-color: #1A211D;
+  color: #E4E9E6;
+}
+
+body.theme-light {
+  background-color: #F2F5F3;
+  color: #1A2520;
+}
+
