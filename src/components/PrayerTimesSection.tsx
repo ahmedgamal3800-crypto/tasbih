@@ -38,6 +38,7 @@ import {
   isAdhanCurrentlyPlaying, 
   unlockAudioContext
 } from '../utils/audioAthkar';
+import { PrayerCountdownTimer } from './PrayerCountdownTimer';
 
 interface PrayerTimesSectionProps {
   settings: UserSettings;
@@ -279,186 +280,119 @@ export const PrayerTimesSection: React.FC<PrayerTimesSectionProps> = ({
   return (
     <div className="space-y-6 animate-fadeIn">
       
-      {/* Hero Countdown Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-[#1A2520] p-6 sm:p-8 border border-[#2D4539] shadow-xl">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-[#2D4539]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-[#4A6354]/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Interactive Prayer Countdown Timer */}
+      <PrayerCountdownTimer
+        prayers={prayers}
+        countdown={countdown}
+        settings={settings}
+        onUpdateSettings={onUpdateSettings}
+        onToggleManualAdjustment={() => setShowManualAdjustment(!showManualAdjustment)}
+        onToggleQibla={handleCalculateQibla}
+        qiblaDegree={qiblaDegree}
+      />
 
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-          
-          {/* Main Info */}
-          <div className="text-center md:text-right space-y-2">
-            <div className="flex items-center justify-center md:justify-start gap-2 text-[#A7C0A8] text-xs font-semibold uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-[#A7C0A8]" />
-              <span>الصلاة القادمة</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl font-bold font-amiri text-[#E4E9E6] flex items-center justify-center md:justify-start gap-3">
-              <span>{countdown.nextPrayer ? countdown.nextPrayer.arabicName : 'الفجر'}</span>
-              <span className="text-xl sm:text-2xl text-[#A7C0A8] font-cairo">
-                {countdown.nextPrayer ? countdown.nextPrayer.formattedTime : '--:--'}
-              </span>
-            </h2>
-
-            <p className="text-[#8BA491] text-sm">
-              الوقت المتبقي حتى أذان الصلاة القادمة بمشيئة الله تعالى
-            </p>
-
-            {/* Country, City & Adhan Voice Selectors */}
-            <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-1.5 sm:gap-2.5">
-              {/* Country Selector */}
-              <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#141C18] border border-[#2A352F] text-[11px] sm:text-xs text-[#E4E9E6]">
-                <Globe className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#A7C0A8] shrink-0" />
-                <span className="text-[#8BA491] hidden sm:inline">الدولة:</span>
-                <select
-                  value={currentCountry}
-                  onChange={(e) => {
-                    const newCountry = e.target.value;
-                    const citiesInCountry = getCitiesForCountry(newCountry);
-                    const firstCity = citiesInCountry[0];
-                    if (firstCity) {
-                      onUpdateSettings({
-                        country: newCountry,
-                        city: firstCity.nameAr,
-                        calculationMethod: firstCity.defaultMethod || settings.calculationMethod
-                      });
-                    } else {
-                      onUpdateSettings({ country: newCountry });
-                    }
-                  }}
-                  className="bg-transparent text-[#A7C0A8] font-medium focus:outline-none cursor-pointer max-w-[100px] xs:max-w-[130px] sm:max-w-none truncate"
-                  title="اختر الدولة"
-                >
-                  {countriesList.map((c) => (
-                    <option key={c} value={c} className="bg-[#141C18] text-[#E4E9E6]">
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* City Selector */}
-              <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#141C18] border border-[#2A352F] text-[11px] sm:text-xs text-[#E4E9E6]">
-                <MapPin className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#A7C0A8] shrink-0" />
-                <span className="text-[#8BA491] hidden sm:inline">المدينة:</span>
-                <select
-                  value={settings.city}
-                  onChange={(e) => {
-                    const newCity = e.target.value;
-                    const cityLoc = CITIES_LIST.find(c => c.nameAr === newCity && c.countryAr === currentCountry) || CITIES_LIST.find(c => c.nameAr === newCity);
-                    if (cityLoc) {
-                      onUpdateSettings({
-                        city: newCity,
-                        country: cityLoc.countryAr,
-                        calculationMethod: cityLoc.defaultMethod || settings.calculationMethod
-                      });
-                    } else {
-                      onUpdateSettings({ city: newCity });
-                    }
-                  }}
-                  className="bg-transparent text-[#A7C0A8] font-medium focus:outline-none cursor-pointer max-w-[100px] xs:max-w-[130px] sm:max-w-none truncate"
-                  title="اختر المدينة"
-                >
-                  {availableCities.map((c) => (
-                    <option key={c.nameAr} value={c.nameAr} className="bg-[#141C18] text-[#E4E9E6]">
-                      {c.nameAr}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <button
-                onClick={handleCalculateQibla}
-                className="flex items-center gap-1 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#141C18] hover:bg-[#2D4539] border border-[#2A352F] text-[#A7C0A8] text-[11px] sm:text-xs font-medium transition-all shrink-0"
-              >
-                <Compass className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#A7C0A8]" />
-                <span>القبلة ({qiblaDegree}°)</span>
-              </button>
-
-              <button
-                onClick={() => setShowManualAdjustment(!showManualAdjustment)}
-                className={`flex items-center gap-1 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl border text-[11px] sm:text-xs font-medium transition-all shrink-0 ${
-                  showManualAdjustment || (settings.prayerManualOffsetMinutes || 0) !== 0 || Object.values(settings.perPrayerOffsets || {}).some(v => v !== 0)
-                    ? 'bg-[#2D4539] border-[#4A6354] text-[#E4E9E6] shadow-md ring-1 ring-[#4A6354]'
-                    : 'bg-[#141C18] hover:bg-[#2D4539] border-[#2A352F] text-[#A7C0A8]'
-                }`}
-                title="تعديل مواقيت الصلاة والتوقيت الصيفي والشتوي"
-              >
-                <Sliders className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#A7C0A8]" />
-                <span>تعديل المواقيت</span>
-                {((settings.prayerManualOffsetMinutes || 0) !== 0 || Object.values(settings.perPrayerOffsets || {}).some(v => v !== 0)) && (
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                )}
-              </button>
-            </div>
-
-            {/* Audio & Push Notification Settings Bar */}
-            <div className="pt-3 border-t border-[#2A352F] flex flex-wrap items-center gap-3 text-xs text-[#8BA491]">
-              <label className="flex items-center gap-2 cursor-pointer hover:text-[#E4E9E6] transition-colors">
-                <input
-                  type="checkbox"
-                  checked={settings.notificationsEnabled !== false}
-                  onChange={async (e) => {
-                    const checked = e.target.checked;
-                    if (checked) {
-                      try {
-                        await requestNotificationPermission();
-                      } catch (err) {
-                        console.warn('Notification permission error', err);
-                      }
-                      onUpdateSettings({ notificationsEnabled: true });
-                      sendLocalNotification('تطبيق تسبيح للموبايل', 'تم تفعيل إشعارات الأذان والصلوات بنجاح! 🔔');
-                    } else {
-                      onUpdateSettings({ notificationsEnabled: false });
-                    }
-                  }}
-                  className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
-                />
-                <span className="font-bold text-[#E4E9E6] flex items-center gap-1">
-                  <Bell className="w-3.5 h-3.5 text-amber-300" />
-                  <span>إشعارات الموبايل للأذان والمواقيت</span>
-                </span>
-              </label>
-
-              <span>•</span>
-
-              <label className="flex items-center gap-2 cursor-pointer hover:text-[#E4E9E6] transition-colors">
-                <input
-                  type="checkbox"
-                  checked={settings.autoAthanEnabled !== false}
-                  onChange={(e) => onUpdateSettings({ autoAthanEnabled: e.target.checked })}
-                  className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
-                />
-                <span className="font-bold text-[#A7C0A8]">الأذان التلقائي</span>
-              </label>
-
-              <span>•</span>
-
-              <label className="flex items-center gap-2 cursor-pointer hover:text-[#E4E9E6] transition-colors">
-                <input
-                  type="checkbox"
-                  checked={settings.prePrayerAudioReminder !== false}
-                  onChange={(e) => onUpdateSettings({ prePrayerAudioReminder: e.target.checked })}
-                  className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
-                />
-                <span>تنبيه صووتي قبل الصلاة (15د)</span>
-              </label>
-            </div>
+      {/* Location & Notification Quick Control Bar */}
+      <div className="bg-[#121C16] p-4 rounded-2xl border border-[#22342A] flex flex-wrap items-center justify-between gap-3 text-xs text-[#8AA393]">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Country Selector */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#18251E] border border-[#22342A] text-[#E5EDE8]">
+            <Globe className="w-3.5 h-3.5 text-[#A5D2B3] shrink-0" />
+            <span className="text-[#8AA393]">الدولة:</span>
+            <select
+              value={currentCountry}
+              onChange={(e) => {
+                const newCountry = e.target.value;
+                const citiesInCountry = getCitiesForCountry(newCountry);
+                const firstCity = citiesInCountry[0];
+                if (firstCity) {
+                  onUpdateSettings({
+                    country: newCountry,
+                    city: firstCity.nameAr,
+                    calculationMethod: firstCity.defaultMethod || settings.calculationMethod
+                  });
+                } else {
+                  onUpdateSettings({ country: newCountry });
+                }
+              }}
+              className="bg-transparent text-[#A5D2B3] font-bold focus:outline-none cursor-pointer"
+            >
+              {countriesList.map((c) => (
+                <option key={c} value={c} className="bg-[#121C16] text-[#E5EDE8]">
+                  {c}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Clock Ring Display */}
-          <div className="flex items-center justify-center bg-[#141C18] p-5 rounded-3xl border border-[#2D4539] shadow-inner">
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-extrabold font-mono text-[#A7C0A8] tracking-wider">
-                {String(countdown.hours).padStart(2, '0')}:
-                {String(countdown.minutes).padStart(2, '0')}:
-                {String(countdown.seconds).padStart(2, '0')}
-              </div>
-              <p className="text-xs text-[#8BA491] mt-1">ساعة : دقيقة : ثانية</p>
-            </div>
+          {/* City Selector */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#18251E] border border-[#22342A] text-[#E5EDE8]">
+            <MapPin className="w-3.5 h-3.5 text-[#A5D2B3] shrink-0" />
+            <span className="text-[#8AA393]">المدينة:</span>
+            <select
+              value={settings.city}
+              onChange={(e) => {
+                const newCity = e.target.value;
+                const cityLoc = CITIES_LIST.find(c => c.nameAr === newCity && c.countryAr === currentCountry) || CITIES_LIST.find(c => c.nameAr === newCity);
+                if (cityLoc) {
+                  onUpdateSettings({
+                    city: newCity,
+                    country: cityLoc.countryAr,
+                    calculationMethod: cityLoc.defaultMethod || settings.calculationMethod
+                  });
+                } else {
+                  onUpdateSettings({ city: newCity });
+                }
+              }}
+              className="bg-transparent text-[#A5D2B3] font-bold focus:outline-none cursor-pointer"
+            >
+              {availableCities.map((c) => (
+                <option key={c.nameAr} value={c.nameAr} className="bg-[#121C16] text-[#E5EDE8]">
+                  {c.nameAr}
+                </option>
+              ))}
+            </select>
           </div>
-
         </div>
+
+        {/* Quick Toggles */}
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2 cursor-pointer hover:text-[#E5EDE8]">
+            <input
+              type="checkbox"
+              checked={settings.notificationsEnabled !== false}
+              onChange={async (e) => {
+                const checked = e.target.checked;
+                if (checked) {
+                  try {
+                    await requestNotificationPermission();
+                  } catch (err) {
+                    console.warn('Notification permission error', err);
+                  }
+                  onUpdateSettings({ notificationsEnabled: true });
+                  sendLocalNotification('تطبيق نور الهداية للموبايل', 'تم تفعيل إشعارات الأذان والصلوات بنجاح! 🔔');
+                } else {
+                  onUpdateSettings({ notificationsEnabled: false });
+                }
+              }}
+              className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+            />
+            <span className="font-bold text-[#A5D2B3] flex items-center gap-1">
+              <Bell className="w-3.5 h-3.5 text-amber-300" />
+              <span>إشعارات الأذان</span>
+            </span>
+          </label>
+
+          <label className="flex items-center gap-2 cursor-pointer hover:text-[#E5EDE8]">
+            <input
+              type="checkbox"
+              checked={settings.autoAthanEnabled !== false}
+              onChange={(e) => onUpdateSettings({ autoAthanEnabled: e.target.checked })}
+              className="w-4 h-4 accent-emerald-500 rounded cursor-pointer"
+            />
+            <span>الأذان التلقائي</span>
+          </label>
+        </div>
+      </div>
 
         {/* Simplified Adhan Settings Section */}
         <div className="mt-6 bg-[#1A2520] border border-[#2D4539] p-5 sm:p-6 rounded-3xl shadow-xl space-y-4">
@@ -817,8 +751,6 @@ export const PrayerTimesSection: React.FC<PrayerTimesSectionProps> = ({
 
           </div>
         )}
-
-      </div>
 
       {/* Grid of 6 Prayer Times */}
       <div>

@@ -19,15 +19,15 @@
 }
 
 :root {
-  --bg-main: #0F1713;
-  --bg-card: #141C18;
-  --bg-subcard: #1A2520;
-  --bg-active: #2D4539;
-  --border-subtle: #2A352F;
-  --border-accent: #4A6354;
-  --text-primary: #E4E9E6;
-  --text-heading: #A7C0A8;
-  --text-muted: #8BA491;
+  --bg-main: #0C1410;
+  --bg-card: #121C16;
+  --bg-subcard: #18251E;
+  --bg-active: #253C30;
+  --border-subtle: #22342A;
+  --border-accent: #3E5A4A;
+  --text-primary: #E5EDE8;
+  --text-heading: #A5D2B3;
+  --text-muted: #8AA393;
 }
 
 /* Native App Feel for Mobile & WebViews */
@@ -42,8 +42,8 @@ input, textarea, [contenteditable="true"] {
 
 /* Custom scrollbars and smooth momentum scrolling */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -51,23 +51,23 @@ input, textarea, [contenteditable="true"] {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 164, 145, 0.25);
+  background: rgba(138, 163, 147, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(167, 192, 168, 0.45);
+  background: rgba(165, 210, 179, 0.45);
 }
 
-/* Base Body Styling with Natural Tones and Safe Area */
+/* Base Body Styling with Eye-Comfort Natural Tones */
 html, body {
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
 }
 
 body {
-  background-color: #0F1713;
-  color: #E4E9E6;
+  background-color: #0C1410;
+  color: #E5EDE8;
   font-family: 'Cairo', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
@@ -75,24 +75,29 @@ body {
   padding-top: env(safe-area-inset-top, 0px);
 }
 
-/* Theme variations matching Natural Tones palette */
+/* Theme variations - Specially tuned for Eye Comfort */
+body.theme-comfort {
+  background-color: #09120D;
+  color: #E2EAE5;
+}
+
 body.theme-emerald {
-  background-color: #0F1713;
-  color: #E4E9E6;
+  background-color: #0C1410;
+  color: #E5EDE8;
 }
 
 body.theme-dark {
-  background-color: #0B110E;
-  color: #E4E9E6;
+  background-color: #080D0B;
+  color: #E2E9E5;
 }
 
 body.theme-sepia {
-  background-color: #1A211D;
-  color: #E4E9E6;
+  background-color: #171E19;
+  color: #E5ECE7;
 }
 
 body.theme-light {
-  background-color: #F2F5F3;
-  color: #1A2520;
+  background-color: #F0F5F2;
+  color: #16241C;
 }
 

@@ -40,13 +40,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { hijriDateStr, gregorianDateStr } = getFormattedHijriDate();
 
   const handleCycleTheme = () => {
-    const themes: ThemeMode[] = ['emerald', 'dark', 'sepia', 'light'];
+    const themes: ThemeMode[] = ['comfort', 'emerald', 'dark', 'sepia', 'light'];
     const nextIdx = (themes.indexOf(settings.theme) + 1) % themes.length;
     onUpdateSettings({ theme: themes[nextIdx] });
   };
 
   const getThemeLabel = (t: ThemeMode) => {
     switch (t) {
+      case 'comfort': return 'مريح للعين 👁️';
       case 'emerald': return 'الزمردي';
       case 'dark': return 'الداكن';
       case 'sepia': return 'الدافئ';
@@ -55,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-[#141C18]/90 border-b border-[#2A352F] transition-colors">
+    <header className="sticky top-0 z-40 backdrop-blur-md bg-[#121C16]/90 border-b border-[#22342A] transition-colors">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5">
         <div className="flex items-center justify-between gap-2 sm:gap-4">
           
@@ -65,14 +66,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setActiveTab('prayers')}
               className="flex items-center gap-2 text-right group"
             >
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#2D4539] border border-[#4A6354] flex items-center justify-center text-[#A7C0A8] shadow-md group-hover:scale-105 transition-transform">
-                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-[#A7C0A8]" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#253C30] border border-[#3E5A4A] flex items-center justify-center text-[#A5D2B3] shadow-md group-hover:scale-105 transition-transform">
+                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-[#A5D2B3]" />
               </div>
               <div>
-                <h1 className="text-base sm:text-xl font-bold font-amiri text-[#A7C0A8] group-hover:text-emerald-300 transition-colors flex items-center gap-1">
-                  تسبيح
+                <h1 className="text-base sm:text-xl font-bold font-amiri text-[#A5D2B3] group-hover:text-emerald-300 transition-colors flex items-center gap-1">
+                  نور الهداية
                 </h1>
-                <p className="text-[10px] text-[#8BA491] hidden sm:block">
+                <p className="text-[10px] text-[#8AA393] hidden sm:block">
                   {hijriDateStr} | {gregorianDateStr}
                 </p>
               </div>

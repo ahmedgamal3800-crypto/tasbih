@@ -1,4 +1,4 @@
-export type ThemeMode = 'dark' | 'emerald' | 'sepia' | 'light';
+export type ThemeMode = 'comfort' | 'dark' | 'emerald' | 'sepia' | 'light';
 
 export interface PrayerTime {
   id: string;

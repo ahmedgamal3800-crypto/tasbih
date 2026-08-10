@@ -148,9 +148,9 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right">
           
           <div className="space-y-1">
-            <h4 className="font-bold font-amiri text-[#A7C0A8] text-sm flex items-center justify-center md:justify-start gap-1.5">
-              <BookOpen className="w-4 h-4 text-[#A7C0A8]" />
-              تطبيق تسبيح - الرفيق الإسلامي الشامل
+            <h4 className="font-bold font-amiri text-[#A5D2B3] text-sm flex items-center justify-center md:justify-start gap-1.5">
+              <BookOpen className="w-4 h-4 text-[#A5D2B3]" />
+              تطبيق نور الهداية - الرفيق الإسلامي الشامل
             </h4>
             <p className="text-[11px] text-[#8BA491] font-tajawal">
               ﴿ وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ ﴾ • جميع الأذكار والآيات مدققة ومحفوظة تلقائياً.
